@@ -1,0 +1,579 @@
+# ==========================================
+# Hytale Survival Games - Arenas Configuration
+# ==========================================
+# Define your Survival Games arenas here
+# Each arena must have unique spawn points and chest locations
+
+arenas:
+  # Example Arena 1 - Default Arena
+  default:
+    # Display name shown to players
+    displayName: "§6Classic Arena"
+
+    # World name
+    world: "world"
+
+    # Arena boundaries (cuboid region)
+    # Corner 1 and Corner 2 define the arena's boundaries
+    corner1:
+      x: 0
+      y: 60
+      z: 0
+
+    corner2:
+      x: 200
+      y: 100
+      z: 200
+
+    # Lobby spawn point (where players wait before game starts)
+    lobby:
+      x: 100
+      y: 65
+      z: 100
+      yaw: 0
+      pitch: 0
+
+    # Player spawn points (at least as many as maxPlayers)
+    # Players will be randomly assigned to these points at game start
+    spawnPoints:
+      - x: 80
+        y: 65
+        z: 80
+        yaw: 45
+        pitch: 0
+
+      - x: 120
+        y: 65
+        z: 80
+        yaw: 135
+        pitch: 0
+
+      - x: 120
+        y: 65
+        z: 120
+        yaw: 225
+        pitch: 0
+
+      - x: 80
+        y: 65
+        z: 120
+        yaw: 315
+        pitch: 0
+
+      - x: 100
+        y: 65
+        z: 70
+        yaw: 90
+        pitch: 0
+
+      - x: 130
+        y: 65
+        z: 100
+        yaw: 180
+        pitch: 0
+
+      - x: 100
+        y: 65
+        z: 130
+        yaw: 270
+        pitch: 0
+
+      - x: 70
+        y: 65
+        z: 100
+        yaw: 0
+        pitch: 0
+
+      - x: 90
+        y: 65
+        z: 90
+        yaw: 45
+        pitch: 0
+
+      - x: 110
+        y: 65
+        z: 90
+        yaw: 135
+        pitch: 0
+
+      - x: 110
+        y: 65
+        z: 110
+        yaw: 225
+        pitch: 0
+
+      - x: 90
+        y: 65
+        z: 110
+        yaw: 315
+        pitch: 0
+
+    # Chest locations for loot spawning
+    chestLocations:
+      # Center chests (high value)
+      - x: 100
+        y: 65
+        z: 100
+
+      - x: 102
+        y: 65
+        z: 100
+
+      - x: 98
+        y: 65
+        z: 100
+
+      # Outer chests
+      - x: 75
+        y: 65
+        z: 75
+
+      - x: 125
+        y: 65
+        z: 75
+
+      - x: 125
+        y: 65
+        z: 125
+
+      - x: 75
+        y: 65
+        z: 125
+
+      - x: 100
+        y: 65
+        z: 65
+
+      - x: 135
+        y: 65
+        z: 100
+
+      - x: 100
+        y: 65
+        z: 135
+
+      - x: 65
+        y: 65
+        z: 100
+
+      # Additional scattered chests
+      - x: 85
+        y: 65
+        z: 85
+
+      - x: 115
+        y: 65
+        z: 85
+
+      - x: 115
+        y: 65
+        z: 115
+
+      - x: 85
+        y: 65
+        z: 115
+
+    # Arena-specific settings
+    minPlayers: 2
+    maxPlayers: 12
+    gameTime: 600        # 10 minutes
+    deathmatchTime: 420  # 7 minutes (deathmatch at 3 min remaining)
+    borderShrinkRadius: 40
+
+  # Example Arena 2 - Smaller Arena
+  quick:
+    displayName: "§cQuick Match"
+    world: "world"
+
+    corner1:
+      x: 300
+      y: 60
+      z: 0
+
+    corner2:
+      x: 400
+      y: 100
+      z: 100
+
+    lobby:
+      x: 350
+      y: 65
+      z: 50
+      yaw: 0
+      pitch: 0
+
+    spawnPoints:
+      - x: 330
+        y: 65
+        z: 30
+        yaw: 45
+        pitch: 0
+
+      - x: 370
+        y: 65
+        z: 30
+        yaw: 135
+        pitch: 0
+
+      - x: 370
+        y: 65
+        z: 70
+        yaw: 225
+        pitch: 0
+
+      - x: 330
+        y: 65
+        z: 70
+        yaw: 315
+        pitch: 0
+
+      - x: 350
+        y: 65
+        z: 25
+        yaw: 90
+        pitch: 0
+
+      - x: 375
+        y: 65
+        z: 50
+        yaw: 180
+        pitch: 0
+
+      - x: 350
+        y: 65
+        z: 75
+        yaw: 270
+        pitch: 0
+
+      - x: 325
+        y: 65
+        z: 50
+        yaw: 0
+        pitch: 0
+
+    chestLocations:
+      - x: 350
+        y: 65
+        z: 50
+
+      - x: 340
+        y: 65
+        z: 40
+
+      - x: 360
+        y: 65
+        z: 40
+
+      - x: 360
+        y: 65
+        z: 60
+
+      - x: 340
+        y: 65
+        z: 60
+
+      - x: 335
+        y: 65
+        z: 35
+
+      - x: 365
+        y: 65
+        z: 35
+
+      - x: 365
+        y: 65
+        z: 65
+
+      - x: 335
+        y: 65
+        z: 65
+
+    minPlayers: 2
+    maxPlayers: 8
+    gameTime: 300        # 5 minutes
+    deathmatchTime: 180  # 3 minutes
+    borderShrinkRadius: 25
+
+  # Example Arena 3 - Large Arena
+  epic:
+    displayName: "§5Epic Battle"
+    world: "world"
+
+    corner1:
+      x: -200
+      y: 60
+      z: -200
+
+    corner2:
+      x: 0
+      y: 120
+      z: 0
+
+    lobby:
+      x: -100
+      y: 70
+      z: -100
+      yaw: 0
+      pitch: 0
+
+    spawnPoints:
+      # North spawns
+      - x: -100
+        y: 65
+        z: -180
+        yaw: 90
+        pitch: 0
+
+      - x: -90
+        y: 65
+        z: -180
+        yaw: 90
+        pitch: 0
+
+      - x: -110
+        y: 65
+        z: -180
+        yaw: 90
+        pitch: 0
+
+      # East spawns
+      - x: -20
+        y: 65
+        z: -100
+        yaw: 180
+        pitch: 0
+
+      - x: -20
+        y: 65
+        z: -90
+        yaw: 180
+        pitch: 0
+
+      - x: -20
+        y: 65
+        z: -110
+        yaw: 180
+        pitch: 0
+
+      # South spawns
+      - x: -100
+        y: 65
+        z: -20
+        yaw: 270
+        pitch: 0
+
+      - x: -90
+        y: 65
+        z: -20
+        yaw: 270
+        pitch: 0
+
+      - x: -110
+        y: 65
+        z: -20
+        yaw: 270
+        pitch: 0
+
+      # West spawns
+      - x: -180
+        y: 65
+        z: -100
+        yaw: 0
+        pitch: 0
+
+      - x: -180
+        y: 65
+        z: -90
+        yaw: 0
+        pitch: 0
+
+      - x: -180
+        y: 65
+        z: -110
+        yaw: 0
+        pitch: 0
+
+      # Corner spawns
+      - x: -150
+        y: 65
+        z: -150
+        yaw: 45
+        pitch: 0
+
+      - x: -50
+        y: 65
+        z: -150
+        yaw: 135
+        pitch: 0
+
+      - x: -50
+        y: 65
+        z: -50
+        yaw: 225
+        pitch: 0
+
+      - x: -150
+        y: 65
+        z: -50
+        yaw: 315
+        pitch: 0
+
+      # Additional spawns
+      - x: -120
+        y: 65
+        z: -120
+        yaw: 45
+        pitch: 0
+
+      - x: -80
+        y: 65
+        z: -120
+        yaw: 135
+        pitch: 0
+
+      - x: -80
+        y: 65
+        z: -80
+        yaw: 225
+        pitch: 0
+
+      - x: -120
+        y: 65
+        z: -80
+        yaw: 315
+        pitch: 0
+
+      - x: -130
+        y: 65
+        z: -100
+        yaw: 0
+        pitch: 0
+
+      - x: -70
+        y: 65
+        z: -100
+        yaw: 180
+        pitch: 0
+
+      - x: -100
+        y: 65
+        z: -130
+        yaw: 90
+        pitch: 0
+
+      - x: -100
+        y: 65
+        z: -70
+        yaw: 270
+        pitch: 0
+
+    chestLocations:
+      # Center chests
+      - x: -100
+        y: 65
+        z: -100
+
+      - x: -95
+        y: 65
+        z: -100
+
+      - x: -105
+        y: 65
+        z: -100
+
+      - x: -100
+        y: 65
+        z: -95
+
+      - x: -100
+        y: 65
+        z: -105
+
+      # Mid-range chests
+      - x: -130
+        y: 65
+        z: -130
+
+      - x: -70
+        y: 65
+        z: -130
+
+      - x: -70
+        y: 65
+        z: -70
+
+      - x: -130
+        y: 65
+        z: -70
+
+      - x: -100
+        y: 65
+        z: -140
+
+      - x: -140
+        y: 65
+        z: -100
+
+      - x: -100
+        y: 65
+        z: -60
+
+      - x: -60
+        y: 65
+        z: -100
+
+      # Outer chests
+      - x: -160
+        y: 65
+        z: -160
+
+      - x: -40
+        y: 65
+        z: -160
+
+      - x: -40
+        y: 65
+        z: -40
+
+      - x: -160
+        y: 65
+        z: -40
+
+      # Additional scattered chests
+      - x: -120
+        y: 65
+        z: -150
+
+      - x: -80
+        y: 65
+        z: -150
+
+      - x: -150
+        y: 65
+        z: -120
+
+      - x: -150
+        y: 65
+        z: -80
+
+      - x: -50
+        y: 65
+        z: -120
+
+      - x: -50
+        y: 65
+        z: -80
+
+      - x: -120
+        y: 65
+        z: -50
+
+      - x: -80
+        y: 65
+        z: -50
+
+    minPlayers: 4
+    maxPlayers: 24
+    gameTime: 900        # 15 minutes
+    deathmatchTime: 600  # 10 minutes
+    borderShrinkRadius: 60
