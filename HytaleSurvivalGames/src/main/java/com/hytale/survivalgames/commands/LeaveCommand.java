@@ -35,7 +35,7 @@ public class LeaveCommand extends CommandBase {
         }
 
         // Check if in a game
-        Arena arena = plugin.getGameManager().getPlayerArena(player.getUUID());
+        Arena arena = plugin.getGameManager().getPlayerArena(player.getPlayerRef().getUuid());
         if (arena == null) {
             context.sendMessage(Message.raw("§cYou are not in a game!"));
             return;

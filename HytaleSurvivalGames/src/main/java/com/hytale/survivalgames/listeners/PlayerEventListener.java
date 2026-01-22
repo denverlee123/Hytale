@@ -30,7 +30,7 @@ public class PlayerEventListener {
         String welcomeMsg = plugin.getConfig().getWelcomeMessage();
         player.sendMessage(Message.raw(welcomeMsg));
 
-        plugin.getLogger().info("Player " + player.getDisplayName() + " joined the server");
+        plugin.getLogger().log("Player " + player.getDisplayName() + " joined the server");
     }
 
     /**
@@ -39,19 +39,24 @@ public class PlayerEventListener {
      * @param event PlayerDisconnectEvent
      */
     public static void onPlayerDisconnect(@Nonnull PlayerDisconnectEvent event) {
-        Player player = event.getPlayer();
         SurvivalGamesPlugin plugin = SurvivalGamesPlugin.getInstance();
 
+        // Get player UUID from event
+        java.util.UUID playerId = event.getPlayerRef().getUuid();
+
         // Check if player is in a game
-        Arena arena = plugin.getGameManager().getPlayerArena(player.getUUID());
+        Arena arena = plugin.getGameManager().getPlayerArena(playerId);
         if (arena != null) {
-            // Remove from arena
-            plugin.getGameManager().leaveArena(player);
-            plugin.getLogger().info("Player " + player.getDisplayName() + " disconnected from game in arena: " + arena.getName());
+            // Get Player object to leave arena
+            Player player = plugin.getServer().getPlayer(playerId).orElse(null);
+            if (player != null) {
+                plugin.getGameManager().leaveArena(player);
+                plugin.getLogger().log("Player disconnected from game in arena: " + arena.getName());
+            }
         }
 
         // Clean up player data
-        plugin.getPlayerDataManager().removePlayerData(player.getUUID());
+        plugin.getPlayerDataManager().removePlayerData(playerId);
     }
 
     /**
@@ -60,18 +65,20 @@ public class PlayerEventListener {
      * @param event PlayerChatEvent
      */
     public static void onPlayerChat(@Nonnull PlayerChatEvent event) {
-        Player player = event.getPlayer();
         SurvivalGamesPlugin plugin = SurvivalGamesPlugin.getInstance();
 
+        // Get player UUID from sender
+        java.util.UUID playerId = event.getSender().getUuid();
+
         // Check if player is in a game
-        Arena arena = plugin.getGameManager().getPlayerArena(player.getUUID());
+        Arena arena = plugin.getGameManager().getPlayerArena(playerId);
         if (arena != null) {
             // Optional: Format chat differently for players in games
             // This would use event.setFormatter() if needed
 
             if (plugin.getConfig().isDebug()) {
-                plugin.getLogger().info("[Arena: " + arena.getName() + "] " +
-                    player.getDisplayName() + ": " + event.getMessage());
+                plugin.getLogger().log("[Arena: " + arena.getName() + "] " +
+                    event.getSender().getUsername() + ": " + event.getContent());
             }
         }
     }

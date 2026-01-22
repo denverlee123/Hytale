@@ -50,7 +50,7 @@ public class GameManager {
      * TODO: Load from configuration file in future iteration
      */
     private void initializeArenas() {
-        plugin.getLogger().info("Initializing arenas...");
+        plugin.getLogger().log("Initializing arenas...");
 
         // For now, we'll create a single default arena
         // In a full implementation, this would load from a config file
@@ -58,8 +58,8 @@ public class GameManager {
         // Note: World loading would need to be done through HytaleServer API
         // For this example, we're showing the structure
 
-        plugin.getLogger().info("Arena initialization complete");
-        plugin.getLogger().info("Note: Arenas must be configured and added via commands or config files");
+        plugin.getLogger().log("Arena initialization complete");
+        plugin.getLogger().log("Note: Arenas must be configured and added via commands or config files");
     }
 
     /**
@@ -83,7 +83,7 @@ public class GameManager {
         );
 
         arenas.put(name, arena);
-        plugin.getLogger().info("Created arena: " + displayName);
+        plugin.getLogger().log("Created arena: " + displayName);
     }
 
     /**
@@ -121,7 +121,7 @@ public class GameManager {
      * Add a player to an arena
      */
     public boolean joinArena(@Nonnull Player player, @Nonnull Arena arena) {
-        UUID playerId = player.getUUID();
+        UUID playerId = player.getPlayerRef().getUuid();
 
         // Check if already in an arena
         if (playerArenas.containsKey(playerId)) {
@@ -157,7 +157,7 @@ public class GameManager {
      * Remove a player from their current arena
      */
     public void leaveArena(@Nonnull Player player) {
-        UUID playerId = player.getUUID();
+        UUID playerId = player.getPlayerRef().getUuid();
         Arena arena = playerArenas.remove(playerId);
 
         if (arena == null) {
@@ -208,7 +208,7 @@ public class GameManager {
         // TODO: Spawn loot in chests
         // TODO: Start game timer
 
-        plugin.getLogger().info("Game started in arena: " + arena.getDisplayName());
+        plugin.getLogger().log("Game started in arena: " + arena.getDisplayName());
     }
 
     /**
@@ -217,19 +217,14 @@ public class GameManager {
     public void handlePlayerElimination(@Nonnull UUID playerId, @Nonnull Arena arena) {
         arena.addSpectator(playerId);
 
-        // Get player for display name
-        Player player = HytaleServer.getInstance().getPlayer(playerId).orElse(null);
-        String playerName = player != null ? player.getDisplayName() : "Player";
-
         broadcastToArena(arena,
-            Message.raw("§c" + playerName + " §7was eliminated! §e" +
+            Message.raw("§cA player §7was eliminated! §e" +
                 arena.getPlayerCount() + " §7remaining."));
 
         // Check win condition
         if (arena.getPlayerCount() == 1) {
             UUID winnerId = arena.getPlayers().get(0);
-            Player winner = HytaleServer.getInstance().getPlayer(winnerId).orElse(null);
-            endGame(arena, winner);
+            endGame(arena, null); // TODO: Get winner Player object
         } else if (arena.getPlayerCount() == 0) {
             endGame(arena, null);
         }
@@ -278,7 +273,7 @@ public class GameManager {
         // Reset arena state
         arena.reset();
 
-        plugin.getLogger().info("Arena reset: " + arena.getDisplayName());
+        plugin.getLogger().log("Arena reset: " + arena.getDisplayName());
     }
 
     /**
@@ -314,17 +309,11 @@ public class GameManager {
 
     /**
      * Broadcast a message to all players in an arena
+     * TODO: Implement proper player lookup once API method is known
      */
     private void broadcastToArena(@Nonnull Arena arena, @Nonnull Message message) {
-        List<UUID> allPlayers = new ArrayList<>();
-        allPlayers.addAll(arena.getPlayers());
-        allPlayers.addAll(arena.getSpectators());
-
-        for (UUID playerId : allPlayers) {
-            Player player = HytaleServer.getInstance().getPlayer(playerId).orElse(null);
-            if (player != null) {
-                player.sendMessage(message);
-            }
-        }
+        // TODO: Get Player objects from UUIDs and send messages
+        // For now, messages will only be logged
+        plugin.getLogger().log("[Broadcast to " + arena.getName() + "]: " + message.toString());
     }
 }

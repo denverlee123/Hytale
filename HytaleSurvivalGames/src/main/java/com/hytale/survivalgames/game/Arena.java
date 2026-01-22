@@ -192,16 +192,16 @@ public class Arena {
      * Check if a position is within arena boundaries
      */
     public boolean isInArena(@Nonnull Vector3d position) {
-        double minX = Math.min(corner1.x(), corner2.x());
-        double maxX = Math.max(corner1.x(), corner2.x());
-        double minY = Math.min(corner1.y(), corner2.y());
-        double maxY = Math.max(corner1.y(), corner2.y());
-        double minZ = Math.min(corner1.z(), corner2.z());
-        double maxZ = Math.max(corner1.z(), corner2.z());
+        double minX = Math.min(corner1.x, corner2.x);
+        double maxX = Math.max(corner1.x, corner2.x);
+        double minY = Math.min(corner1.y, corner2.y);
+        double maxY = Math.max(corner1.y, corner2.y);
+        double minZ = Math.min(corner1.z, corner2.z);
+        double maxZ = Math.max(corner1.z, corner2.z);
 
-        return position.x() >= minX && position.x() <= maxX &&
-               position.y() >= minY && position.y() <= maxY &&
-               position.z() >= minZ && position.z() <= maxZ;
+        return position.x >= minX && position.x <= maxX &&
+               position.y >= minY && position.y <= maxY &&
+               position.z >= minZ && position.z <= maxZ;
     }
 
     /**
@@ -209,9 +209,9 @@ public class Arena {
      */
     @Nonnull
     public Vector3d getCenterPoint() {
-        double x = (corner1.x() + corner2.x()) / 2;
-        double y = (corner1.y() + corner2.y()) / 2;
-        double z = (corner1.z() + corner2.z()) / 2;
+        double x = (corner1.x + corner2.x) / 2;
+        double y = (corner1.y + corner2.y) / 2;
+        double z = (corner1.z + corner2.z) / 2;
         return new Vector3d(x, y, z);
     }
 
