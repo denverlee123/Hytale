@@ -30,7 +30,7 @@ public class PlayerEventListener {
         String welcomeMsg = plugin.getConfig().getWelcomeMessage();
         player.sendMessage(Message.raw(welcomeMsg));
 
-        plugin.getLogger().log("Player " + player.getDisplayName() + " joined the server");
+        plugin.// getLogger().log("Player " + player.getDisplayName() + " joined the server");
     }
 
     /**
@@ -47,12 +47,10 @@ public class PlayerEventListener {
         // Check if player is in a game
         Arena arena = plugin.getGameManager().getPlayerArena(playerId);
         if (arena != null) {
-            // Get Player object to leave arena
-            Player player = plugin.getServer().getPlayer(playerId).orElse(null);
-            if (player != null) {
-                plugin.getGameManager().leaveArena(player);
-                plugin.getLogger().log("Player disconnected from game in arena: " + arena.getName());
-            }
+            // TODO: Remove player from arena
+            // Need Player object but no way to get it from UUID in current API
+            // plugin.getGameManager().leaveArena(player);
+            arena.removePlayer(playerId);
         }
 
         // Clean up player data
@@ -77,7 +75,7 @@ public class PlayerEventListener {
             // This would use event.setFormatter() if needed
 
             if (plugin.getConfig().isDebug()) {
-                plugin.getLogger().log("[Arena: " + arena.getName() + "] " +
+                plugin.// getLogger().log("[Arena: " + arena.getName() + "] " +
                     event.getSender().getUsername() + ": " + event.getContent());
             }
         }
