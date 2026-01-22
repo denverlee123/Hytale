@@ -1,0 +1,33 @@
+# Gradle
+.gradle/
+build/
+out/
+bin/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Mac
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Hytale Server
+libraries/HytaleServer.jar
+
+# Java
+*.class
+*.jar
+!gradle-wrapper.jar
