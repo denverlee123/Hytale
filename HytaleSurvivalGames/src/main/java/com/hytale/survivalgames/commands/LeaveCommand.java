@@ -26,12 +26,13 @@ public class LeaveCommand extends CommandBase {
     @Override
     protected void executeSync(@Nonnull CommandContext context) {
         // Check if command sender is a player
-        if (!(context.getSender() instanceof Player)) {
+        Player player;
+        try {
+            player = context.senderAs(Player.class);
+        } catch (Exception e) {
             context.sendMessage(Message.raw("§cOnly players can leave games!"));
             return;
         }
-
-        Player player = (Player) context.getSender();
 
         // Check if in a game
         Arena arena = plugin.getGameManager().getPlayerArena(player.getUUID());
