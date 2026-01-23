@@ -1,10 +1,13 @@
 package com.hytale.survivalgames.game;
 
+import com.hypixel.hytale.component.ComponentAccessor;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
 
 import javax.annotation.Nonnull;
@@ -223,23 +226,25 @@ public class GameManager {
         List<Vector3d> shuffledSpawns = new ArrayList<>(spawnPoints);
         Collections.shuffle(shuffledSpawns);
 
-        // TODO: Implement player teleportation when Hytale's Transform/Position API is available
-        // Current API limitations:
-        // - HytaleServer.getServer() method doesn't exist
-        // - Player.setPosition() method doesn't exist
-        // - Need to use Transform component system when documented
-        //
-        // Planned implementation:
-        // 1. Get each player entity by UUID
-        // 2. Access their Transform component
-        // 3. Set position to assigned spawn point
-        // 4. Send "Good luck!" message to each player
+        // Get world and component accessor for teleportation
+        World world = arena.getWorld();
+        ComponentAccessor<EntityStore> accessor = world.getEntityStore().getStore();
 
-        // For now, spawn points are assigned but teleportation is pending API availability
+        // Teleport each player to a spawn point
         for (int i = 0; i < players.size(); i++) {
             UUID playerId = players.get(i);
             Vector3d spawnPoint = shuffledSpawns.get(i % shuffledSpawns.size());
-            // Teleportation will happen here when API is available
+
+            // Get player entity and ref
+            Player player = (Player) world.getEntity(playerId);
+            if (player != null) {
+                Ref<EntityStore> playerRef = world.getEntityRef(playerId);
+                if (playerRef != null) {
+                    // Teleport player to spawn point
+                    player.moveTo(playerRef, spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), accessor);
+                    player.sendMessage(Message.raw("Good luck!"));
+                }
+            }
         }
     }
 
