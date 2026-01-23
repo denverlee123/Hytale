@@ -5,13 +5,8 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
-import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
 import com.hytale.survivalgames.game.Arena;
 
@@ -23,7 +18,7 @@ import javax.annotation.Nonnull;
  * Adds a chest loot spawn location at the player's current position.
  * When the game starts, these locations will have loot spawned in them.
  */
-public class AddChestCommand extends AbstractPlayerCommand {
+public class AddChestCommand extends CommandBase {
 
     private final SurvivalGamesPlugin plugin;
     private final RequiredArg<String> arenaNameArg;
@@ -35,11 +30,23 @@ public class AddChestCommand extends AbstractPlayerCommand {
     }
 
     @Override
-    protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
-                          @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef,
-                          @Nonnull World world) {
+    protected void executeSync(@Nonnull CommandContext context) {
+        // Check if command sender is a player
+        Player player;
+        try {
+            player = context.senderAs(Player.class);
+        } catch (Exception e) {
+            context.sendMessage(Message.raw("Only players can add chest locations!"));
+            return;
+        }
+
         // Get arena name from command argument
         String arenaName = arenaNameArg.get(context);
+
+        if (arenaName == null) {
+            context.sendMessage(Message.raw("Usage: /sgaddchest <arena>"));
+            return;
+        }
 
         // Get the arena
         Arena arena = plugin.getGameManager().getArena(arenaName);
@@ -49,14 +56,8 @@ public class AddChestCommand extends AbstractPlayerCommand {
             return;
         }
 
-        // Get player's current position via TransformComponent
-        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-        if (transform == null) {
-            context.sendMessage(Message.raw("Error: Could not get player position!"));
-            return;
-        }
-
-        Vector3d chestLocation = transform.getPosition();
+        // Get player's current position
+        Vector3d chestLocation = player.getPosition();
         arena.addChestLocation(chestLocation);
 
         int chestCount = arena.getChestLocations().size();
