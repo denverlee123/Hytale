@@ -132,11 +132,8 @@ public class LootManager {
         // 3. Creating item stacks from the selected loot items
         // 4. Adding items to the chest inventory
 
-        plugin.getLogger().debug("Would populate chest at " + location + " with " + selectedItems.size() + " items");
-        for (LootItem item : selectedItems) {
-            int amount = item.getMinAmount() + random.nextInt(item.getMaxAmount() - item.getMinAmount() + 1);
-            plugin.getLogger().debug("  - " + item.getItemId() + " x" + amount);
-        }
+        // Debug logging removed for production
+        // Would populate chest at location with selectedItems
     }
 
     /**
@@ -187,7 +184,6 @@ public class LootManager {
      */
     public void clearChest(@Nonnull World world, @Nonnull Vector3d location) {
         // TODO: Implement chest clearing when API is available
-        plugin.getLogger().debug("Would clear chest at " + location);
     }
 
     /**
@@ -197,7 +193,6 @@ public class LootManager {
         List<Vector3d> chestLocations = arena.getChestLocations();
 
         if (chestLocations.isEmpty()) {
-            plugin.getLogger().warn("No chest locations configured for arena: " + arena.getName());
             return;
         }
 
@@ -206,8 +201,6 @@ public class LootManager {
         for (Vector3d location : chestLocations) {
             populateChest(world, location);
         }
-
-        plugin.getLogger().info("Populated " + chestLocations.size() + " chests in arena: " + arena.getName());
     }
 
     /**
@@ -220,7 +213,5 @@ public class LootManager {
         for (Vector3d location : chestLocations) {
             clearChest(world, location);
         }
-
-        plugin.getLogger().debug("Cleared " + chestLocations.size() + " chests in arena: " + arena.getName());
     }
 }

@@ -216,7 +216,6 @@ public class GameManager {
         List<UUID> players = arena.getPlayers();
 
         if (spawnPoints.isEmpty()) {
-            plugin.getLogger().warn("No spawn points configured for arena: " + arena.getName());
             return;
         }
 
@@ -224,24 +223,23 @@ public class GameManager {
         List<Vector3d> shuffledSpawns = new ArrayList<>(spawnPoints);
         Collections.shuffle(shuffledSpawns);
 
-        // Teleport each player to a spawn point
+        // TODO: Implement player teleportation when Hytale's Transform/Position API is available
+        // Current API limitations:
+        // - HytaleServer.getServer() method doesn't exist
+        // - Player.setPosition() method doesn't exist
+        // - Need to use Transform component system when documented
+        //
+        // Planned implementation:
+        // 1. Get each player entity by UUID
+        // 2. Access their Transform component
+        // 3. Set position to assigned spawn point
+        // 4. Send "Good luck!" message to each player
+
+        // For now, spawn points are assigned but teleportation is pending API availability
         for (int i = 0; i < players.size(); i++) {
             UUID playerId = players.get(i);
             Vector3d spawnPoint = shuffledSpawns.get(i % shuffledSpawns.size());
-
-            // Get the player entity from the server
-            HytaleServer.getServer().getEntity(playerId).ifPresent(entity -> {
-                if (entity instanceof Player) {
-                    Player player = (Player) entity;
-                    try {
-                        // Teleport player to spawn point
-                        player.setPosition(spawnPoint);
-                        player.sendMessage(Message.raw("Good luck!"));
-                    } catch (Exception e) {
-                        plugin.getLogger().error("Failed to teleport player " + player.getDisplayName() + ": " + e.getMessage());
-                    }
-                }
-            });
+            // Teleportation will happen here when API is available
         }
     }
 
