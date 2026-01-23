@@ -30,7 +30,6 @@ public class PlayerEventListener {
         String welcomeMsg = plugin.getConfig().getWelcomeMessage();
         player.sendMessage(Message.raw(welcomeMsg));
 
-        plugin.// getLogger().log("Player " + player.getDisplayName() + " joined the server");
     }
 
     /**
@@ -74,10 +73,11 @@ public class PlayerEventListener {
             // Optional: Format chat differently for players in games
             // This would use event.setFormatter() if needed
 
-            if (plugin.getConfig().isDebug()) {
-                plugin.// getLogger().log("[Arena: " + arena.getName() + "] " +
-                    event.getSender().getUsername() + ": " + event.getContent());
-            }
+            // TODO: Add debug logging once logger API is known
+            // if (plugin.getConfig().isDebug()) {
+            //     log("[Arena: " + arena.getName() + "] " +
+            //         event.getSender().getUsername() + ": " + event.getContent());
+            // }
         }
     }
 }
