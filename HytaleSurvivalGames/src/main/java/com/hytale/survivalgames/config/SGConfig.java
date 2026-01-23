@@ -19,52 +19,52 @@ public class SGConfig {
     public static final BuilderCodec<SGConfig> CODEC = BuilderCodec
             .builder(SGConfig.class, SGConfig::new)
             // Minimum players to start a game
-            .append(new KeyedCodec<>("minPlayers", Codec.INTEGER),
+            .append(new KeyedCodec<>("MinPlayers", Codec.INTEGER),
                     (config, value, info) -> config.minPlayers = value,
                     (config, info) -> config.minPlayers)
             .add()
             // Maximum players per arena
-            .append(new KeyedCodec<>("maxPlayers", Codec.INTEGER),
+            .append(new KeyedCodec<>("MaxPlayers", Codec.INTEGER),
                     (config, value, info) -> config.maxPlayers = value,
                     (config, info) -> config.maxPlayers)
             .add()
             // Game duration in seconds
-            .append(new KeyedCodec<>("gameTime", Codec.INTEGER),
+            .append(new KeyedCodec<>("GameTime", Codec.INTEGER),
                     (config, value, info) -> config.gameTime = value,
                     (config, info) -> config.gameTime)
             .add()
             // Countdown before game starts
-            .append(new KeyedCodec<>("countdownTime", Codec.INTEGER),
+            .append(new KeyedCodec<>("CountdownTime", Codec.INTEGER),
                     (config, value, info) -> config.countdownTime = value,
                     (config, info) -> config.countdownTime)
             .add()
             // Time until deathmatch starts
-            .append(new KeyedCodec<>("deathmatchTime", Codec.INTEGER),
+            .append(new KeyedCodec<>("DeathmatchTime", Codec.INTEGER),
                     (config, value, info) -> config.deathmatchTime = value,
                     (config, info) -> config.deathmatchTime)
             .add()
             // Border shrink radius for deathmatch
-            .append(new KeyedCodec<>("borderRadius", Codec.INTEGER),
+            .append(new KeyedCodec<>("BorderRadius", Codec.INTEGER),
                     (config, value, info) -> config.borderRadius = value,
                     (config, info) -> config.borderRadius)
             .add()
             // Enable debug messages
-            .append(new KeyedCodec<>("debug", Codec.BOOLEAN),
+            .append(new KeyedCodec<>("Debug", Codec.BOOLEAN),
                     (config, value, info) -> config.debug = value,
                     (config, info) -> config.debug)
             .add()
             // Broadcast game start to server
-            .append(new KeyedCodec<>("broadcastStart", Codec.BOOLEAN),
+            .append(new KeyedCodec<>("BroadcastStart", Codec.BOOLEAN),
                     (config, value, info) -> config.broadcastStart = value,
                     (config, info) -> config.broadcastStart)
             .add()
             // Broadcast game end to server
-            .append(new KeyedCodec<>("broadcastEnd", Codec.BOOLEAN),
+            .append(new KeyedCodec<>("BroadcastEnd", Codec.BOOLEAN),
                     (config, value, info) -> config.broadcastEnd = value,
                     (config, info) -> config.broadcastEnd)
             .add()
             // Welcome message
-            .append(new KeyedCodec<>("welcomeMessage", Codec.STRING),
+            .append(new KeyedCodec<>("WelcomeMessage", Codec.STRING),
                     (config, value, info) -> config.welcomeMessage = value,
                     (config, info) -> config.welcomeMessage)
             .add()
