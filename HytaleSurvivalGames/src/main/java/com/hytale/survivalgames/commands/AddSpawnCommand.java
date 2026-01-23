@@ -1,25 +1,36 @@
 package com.hytale.survivalgames.commands;
 
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
+import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
+import com.hytale.survivalgames.game.Arena;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
 
 /**
  * /sgaddspawn <arena> command - Adds a spawn point to an arena
  *
- * Currently a stub - needs proper Hytale API documentation to implement
+ * Adds a player spawn point at the player's current location.
+ * Players will be randomly teleported to one of these points when the game starts.
  */
 public class AddSpawnCommand extends CommandBase {
 
     private final SurvivalGamesPlugin plugin;
+    private final RequiredArg<String> arenaNameArg;
 
     public AddSpawnCommand(@Nonnull SurvivalGamesPlugin plugin) {
         super("sgaddspawn", "Add a spawn point to an arena");
         this.plugin = plugin;
+        this.arenaNameArg = this.withRequiredArg("arena", "Arena name", ArgTypes.STRING);
     }
 
     @Override
@@ -33,7 +44,39 @@ public class AddSpawnCommand extends CommandBase {
             return;
         }
 
-        context.sendMessage(Message.raw("Add spawn command is not yet implemented."));
-        context.sendMessage(Message.raw("Waiting for proper Hytale API documentation."));
+        // Get arena name from command argument
+        String arenaName = arenaNameArg.get(context);
+
+        if (arenaName == null) {
+            context.sendMessage(Message.raw("Usage: /sgaddspawn <arena>"));
+            return;
+        }
+
+        // Get the arena
+        Arena arena = plugin.getGameManager().getArena(arenaName);
+        if (arena == null) {
+            context.sendMessage(Message.raw("Arena '" + arenaName + "' does not exist!"));
+            context.sendMessage(Message.raw("Use /sgcreate " + arenaName + " to create it first."));
+            return;
+        }
+
+        // Get player's position using PlayerRef
+        UUID playerUUID = player.getUuid();
+        PlayerRef playerRef = Universe.get().getPlayer(playerUUID);
+        Transform playerTransform = playerRef.getTransform();
+        Vector3d spawnPoint = playerTransform.getPosition();
+
+        arena.addSpawnPoint(spawnPoint);
+
+        int spawnCount = arena.getSpawnPoints().size();
+        context.sendMessage(Message.raw("Added spawn point #" + spawnCount + " to arena '" + arenaName + "'"));
+        context.sendMessage(Message.raw("Location: " +
+            String.format("X: %.1f, Y: %.1f, Z: %.1f", spawnPoint.x, spawnPoint.y, spawnPoint.z)));
+
+        // Recommend minimum spawn points
+        if (spawnCount < arena.getMaxPlayers()) {
+            context.sendMessage(Message.raw("TIP: Add " + (arena.getMaxPlayers() - spawnCount) +
+                " more spawn points for max capacity"));
+        }
     }
 }
