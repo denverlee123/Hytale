@@ -120,7 +120,8 @@ public class GameManager {
      * Add a player to an arena
      */
     public boolean joinArena(@Nonnull Player player, @Nonnull Arena arena) {
-        UUID playerId = player.getId();
+        @SuppressWarnings("removal")
+        UUID playerId = player.getUuid();
 
         // Check if already in an arena
         if (playerArenas.containsKey(playerId)) {
@@ -156,7 +157,8 @@ public class GameManager {
      * Remove a player from their current arena
      */
     public void leaveArena(@Nonnull Player player) {
-        UUID playerId = player.getId();
+        @SuppressWarnings("removal")
+        UUID playerId = player.getUuid();
         Arena arena = playerArenas.remove(playerId);
 
         if (arena == null) {

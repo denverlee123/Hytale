@@ -36,7 +36,9 @@ public class JoinCommand extends CommandBase {
         }
 
         // Check if already in a game
-        if (plugin.getGameManager().getPlayerArena(player.getId()) != null) {
+        @SuppressWarnings("removal")
+        java.util.UUID playerId = player.getUuid();
+        if (plugin.getGameManager().getPlayerArena(playerId) != null) {
             context.sendMessage(Message.raw("§cYou are already in a game! Use /sgleave to leave."));
             return;
         }
