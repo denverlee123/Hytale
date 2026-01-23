@@ -48,65 +48,18 @@ public class GameManager {
      * Initialize arenas
      *
      * TODO: Load from configuration file in future iteration
+     *
+     * Note: This is a placeholder. Arenas should be created through commands
+     * once worlds are loaded, as we don't have access to get worlds at plugin init.
      */
     private void initializeArenas() {
-        // Get the main world from the server
-        World defaultWorld = HytaleServer.getUniverse().getWorlds().stream()
-            .findFirst()
-            .orElse(null);
+        // Arena initialization is deferred until worlds are available
+        // Arenas can be created via commands once the server is fully loaded
 
-        if (defaultWorld == null) {
-            // No world available yet - server might still be loading
-            // Plugin will work but no arenas until world is ready
-            return;
-        }
+        // Server admins should use commands to create arenas:
+        // Example: /sgcreate <name> <world> <coords...>
 
-        // Create a default arena with example coordinates
-        // In production, these would be loaded from a config file
-        String arenaName = "default";
-        String displayName = "Default Arena";
-
-        // Arena boundaries (100x100x100 area centered at origin)
-        Vector3d corner1 = new Vector3d(-50, 0, -50);
-        Vector3d corner2 = new Vector3d(50, 100, 50);
-
-        // Lobby spawn at the center, elevated
-        Vector3d lobbySpawn = new Vector3d(0, 65, 0);
-
-        // Create the arena
-        Arena arena = new Arena(
-            arenaName,
-            displayName,
-            defaultWorld,
-            corner1,
-            corner2,
-            lobbySpawn,
-            plugin.getConfig().getMinPlayers(),
-            plugin.getConfig().getMaxPlayers(),
-            plugin.getConfig().getGameTime(),
-            plugin.getConfig().getDeathmatchTime(),
-            plugin.getConfig().getBorderRadius()
-        );
-
-        // Add some spawn points around the arena
-        arena.addSpawnPoint(new Vector3d(20, 64, 20));
-        arena.addSpawnPoint(new Vector3d(-20, 64, 20));
-        arena.addSpawnPoint(new Vector3d(20, 64, -20));
-        arena.addSpawnPoint(new Vector3d(-20, 64, -20));
-        arena.addSpawnPoint(new Vector3d(30, 64, 0));
-        arena.addSpawnPoint(new Vector3d(-30, 64, 0));
-        arena.addSpawnPoint(new Vector3d(0, 64, 30));
-        arena.addSpawnPoint(new Vector3d(0, 64, -30));
-
-        // Add some chest locations
-        arena.addChestLocation(new Vector3d(15, 64, 15));
-        arena.addChestLocation(new Vector3d(-15, 64, 15));
-        arena.addChestLocation(new Vector3d(15, 64, -15));
-        arena.addChestLocation(new Vector3d(-15, 64, -15));
-        arena.addChestLocation(new Vector3d(0, 64, 0));
-
-        // Register the arena
-        arenas.put(arenaName, arena);
+        System.out.println("Arena initialization deferred - create arenas via commands");
     }
 
     /**
@@ -167,7 +120,7 @@ public class GameManager {
      * Add a player to an arena
      */
     public boolean joinArena(@Nonnull Player player, @Nonnull Arena arena) {
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getId();
 
         // Check if already in an arena
         if (playerArenas.containsKey(playerId)) {
@@ -203,7 +156,7 @@ public class GameManager {
      * Remove a player from their current arena
      */
     public void leaveArena(@Nonnull Player player) {
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getId();
         Arena arena = playerArenas.remove(playerId);
 
         if (arena == null) {
@@ -353,24 +306,14 @@ public class GameManager {
 
     /**
      * Broadcast a message to all players in an arena
+     *
+     * Note: This is a simplified implementation. In a full implementation,
+     * we would cache Player references or use HytaleServer API to lookup players.
      */
     private void broadcastToArena(@Nonnull Arena arena, @Nonnull Message message) {
-        // Get all players (alive + spectators) in the arena
-        List<UUID> allPlayers = new ArrayList<>();
-        allPlayers.addAll(arena.getPlayers());
-        allPlayers.addAll(arena.getSpectators());
-
-        // Send message to each player
-        for (UUID playerId : allPlayers) {
-            // Get player from server's entity registry
-            HytaleServer.getUniverse().getWorlds().forEach(world -> {
-                world.getEntities().stream()
-                    .filter(entity -> entity instanceof Player)
-                    .map(entity -> (Player) entity)
-                    .filter(player -> player.getUuid().equals(playerId))
-                    .findFirst()
-                    .ifPresent(player -> player.sendMessage(message));
-            });
-        }
+        // TODO: Implement player lookup and message sending
+        // This requires access to HytaleServer's player registry
+        // For now, log the message that would be broadcast
+        System.out.println("[Arena: " + arena.getName() + "] " + message);
     }
 }
