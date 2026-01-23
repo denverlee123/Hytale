@@ -30,7 +30,7 @@ public class LeaveCommand extends CommandBase {
         try {
             player = context.senderAs(Player.class);
         } catch (Exception e) {
-            context.sendMessage(Message.raw("§cOnly players can leave games!"));
+            context.sendMessage(Message.raw("Only players can leave games!"));
             return;
         }
 
@@ -39,12 +39,12 @@ public class LeaveCommand extends CommandBase {
         java.util.UUID playerId = player.getUuid();
         Arena arena = plugin.getGameManager().getPlayerArena(playerId);
         if (arena == null) {
-            context.sendMessage(Message.raw("§cYou are not in a game!"));
+            context.sendMessage(Message.raw("You are not in a game!"));
             return;
         }
 
         // Leave the arena
         plugin.getGameManager().leaveArena(player);
-        context.sendMessage(Message.raw("§aYou left the game!"));
+        context.sendMessage(Message.raw("You left the game!"));
     }
 }
