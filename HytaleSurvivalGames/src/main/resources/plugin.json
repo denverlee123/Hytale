@@ -1,0 +1,8 @@
+{
+  "name": "HytaleSurvivalGames",
+  "version": "1.0.0",
+  "main": "com.hytale.survivalgames.SurvivalGamesPlugin",
+  "author": "HytaleDevTeam",
+  "description": "A complete Survival Games (Hunger Games) implementation for Hytale servers",
+  "website": "https://github.com/denverlee123/Hytale"
+}
