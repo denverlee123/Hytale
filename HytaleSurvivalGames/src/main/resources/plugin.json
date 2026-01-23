@@ -1,0 +1,8 @@
+{
+  "Name": "HytaleSurvivalGames",
+  "Namespace": "com.hytale.survivalgames",
+  "Version": "1.0.0",
+  "Description": "A complete Survival Games implementation for Hytale servers",
+  "Author": "HytaleDevTeam",
+  "MainClass": "com.hytale.survivalgames.SurvivalGamesPlugin"
+}
