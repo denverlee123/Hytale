@@ -7,7 +7,11 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
 
 import javax.annotation.Nonnull;
@@ -55,8 +59,18 @@ public class CreateArenaCommand extends CommandBase {
         }
 
         // Get player's current position and world
-        Vector3d playerPos = player.getPosition();
         World world = player.getWorld();
+        EntityStore entityStore = world.getEntityStore();
+        Ref<EntityStore> playerRef = player.ref();
+        Store<EntityStore> store = entityStore.store();
+
+        TransformComponent transform = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (transform == null) {
+            context.sendMessage(Message.raw("Error: Could not get player position!"));
+            return;
+        }
+
+        Vector3d playerPos = transform.getPosition();
 
         // Create arena boundaries (100x100x100 area centered on player)
         Vector3d corner1 = new Vector3d(playerPos.x - 50, playerPos.y - 10, playerPos.z - 50);

@@ -7,6 +7,11 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
 import com.hytale.survivalgames.game.Arena;
 
@@ -56,8 +61,19 @@ public class AddChestCommand extends CommandBase {
             return;
         }
 
-        // Get player's current position
-        Vector3d chestLocation = player.getPosition();
+        // Get player's current position using ECS
+        World world = player.getWorld();
+        EntityStore entityStore = world.getEntityStore();
+        Ref<EntityStore> playerRef = player.ref();
+        Store<EntityStore> store = entityStore.store();
+
+        TransformComponent transform = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (transform == null) {
+            context.sendMessage(Message.raw("Error: Could not get player position!"));
+            return;
+        }
+
+        Vector3d chestLocation = transform.getPosition();
         arena.addChestLocation(chestLocation);
 
         int chestCount = arena.getChestLocations().size();
