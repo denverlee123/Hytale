@@ -14,7 +14,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -23,8 +23,9 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 dependencies {
-    // Hytale Server API
-    compileOnly name: 'HytaleServer'
+    // Hytale Server API - will be provided by server at runtime
+    // If compiling locally, place HytaleServer.jar in libraries/ directory
+    compileOnly fileTree(dir: 'libraries', include: '*.jar', allowEmptyDirFileTree: true)
 
     // Optional: Annotations
     compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
