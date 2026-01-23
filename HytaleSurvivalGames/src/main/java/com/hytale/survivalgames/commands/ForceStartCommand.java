@@ -4,16 +4,14 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
-import com.hytale.survivalgames.game.Arena;
-import com.hytale.survivalgames.game.GameState;
 
 import javax.annotation.Nonnull;
 
 /**
  * /sgforcestart <arena> command - Force starts a game in an arena
  *
- * Starts a game immediately without waiting for minimum players or countdown.
- * Useful for testing arenas or starting games manually.
+ * NOTE: This command is a stub and requires Hytale API information to complete.
+ * Specifically needs command argument parsing to get the arena name.
  */
 public class ForceStartCommand extends CommandBase {
 
@@ -26,39 +24,7 @@ public class ForceStartCommand extends CommandBase {
 
     @Override
     protected void executeSync(@Nonnull CommandContext context) {
-        // Get arena name from arguments
-        String[] args = context.getArguments();
-        if (args.length < 1) {
-            context.sendMessage(Message.raw("Usage: /sgforcestart <arena-name>"));
-            return;
-        }
-
-        String arenaName = args[0];
-
-        // Get the arena
-        Arena arena = plugin.getGameManager().getArena(arenaName);
-        if (arena == null) {
-            context.sendMessage(Message.raw("Arena '" + arenaName + "' does not exist!"));
-            return;
-        }
-
-        // Check if arena is already running
-        if (arena.getGameState() == GameState.IN_GAME) {
-            context.sendMessage(Message.raw("Arena '" + arenaName + "' is already running!"));
-            return;
-        }
-
-        // Check if there are any players
-        if (arena.getPlayerCount() == 0) {
-            context.sendMessage(Message.raw("Cannot start arena '" + arenaName + "' - no players!"));
-            context.sendMessage(Message.raw("Use /sgjoin " + arenaName + " to join first."));
-            return;
-        }
-
-        // Force start the game
-        plugin.getGameManager().forceStart(arena);
-
-        context.sendMessage(Message.raw("Force started game in arena '" + arenaName + "'"));
-        context.sendMessage(Message.raw("Players: " + arena.getPlayerCount()));
+        context.sendMessage(Message.raw("ERROR: Force start requires Hytale API methods not yet implemented."));
+        context.sendMessage(Message.raw("Missing: Command argument parsing to get arena name"));
     }
 }
