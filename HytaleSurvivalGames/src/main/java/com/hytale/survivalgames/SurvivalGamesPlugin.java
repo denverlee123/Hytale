@@ -97,14 +97,16 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Main SG command with subcommands
         this.getCommandRegistry().registerCommand(new SGCommand(this));
 
-        // Quick join command
+        // Player commands
         this.getCommandRegistry().registerCommand(new JoinCommand(this));
-
-        // Leave command
         this.getCommandRegistry().registerCommand(new LeaveCommand(this));
-
-        // List arenas command
         this.getCommandRegistry().registerCommand(new ListCommand(this));
+
+        // Admin commands for arena setup
+        this.getCommandRegistry().registerCommand(new CreateArenaCommand(this));
+        this.getCommandRegistry().registerCommand(new AddSpawnCommand(this));
+        this.getCommandRegistry().registerCommand(new AddChestCommand(this));
+        this.getCommandRegistry().registerCommand(new ForceStartCommand(this));
 
         System.out.println("Commands registered successfully");
     }

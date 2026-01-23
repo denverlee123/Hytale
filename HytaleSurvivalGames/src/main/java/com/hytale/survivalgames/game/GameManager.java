@@ -192,6 +192,19 @@ public class GameManager {
     }
 
     /**
+     * Force start a game immediately without countdown
+     * Used by admin commands to manually start games
+     */
+    public void forceStart(@Nonnull Arena arena) {
+        if (arena.getGameState().isRunning()) {
+            return; // Already running
+        }
+
+        System.out.println("Force starting game in arena: " + arena.getName());
+        startGame(arena);
+    }
+
+    /**
      * Start the actual game
      */
     private void startGame(@Nonnull Arena arena) {

@@ -24,12 +24,15 @@ public class SGCommand extends CommandBase {
     @Override
     protected void executeSync(@Nonnull CommandContext context) {
         // Send help/info message
-        context.sendMessage(Message.raw("§e§l=== Survival Games ==="));
-        context.sendMessage(Message.raw("§7/sg join [arena] §f- Join a game"));
-        context.sendMessage(Message.raw("§7/sg leave §f- Leave current game"));
-        context.sendMessage(Message.raw("§7/sg list §f- List all arenas"));
-        context.sendMessage(Message.raw("§7/sg stats §f- View your statistics"));
+        context.sendMessage(Message.raw("=== Survival Games ==="));
+        context.sendMessage(Message.raw("/sg join [arena] - Join a game"));
+        context.sendMessage(Message.raw("/sg leave - Leave current game"));
+        context.sendMessage(Message.raw("/sg list - List all arenas"));
+        context.sendMessage(Message.raw("/sg create <name> - Create new arena"));
+        context.sendMessage(Message.raw("/sg addspawn <arena> - Add spawn point at your location"));
+        context.sendMessage(Message.raw("/sg addchest <arena> - Add chest location at your position"));
+        context.sendMessage(Message.raw("/sg forcestart <arena> - Force start a game"));
         context.sendMessage(Message.raw(""));
-        context.sendMessage(Message.raw("§7Arenas loaded: §e" + plugin.getGameManager().getArenaCount()));
+        context.sendMessage(Message.raw("Arenas loaded: " + plugin.getGameManager().getArenaCount()));
     }
 }
