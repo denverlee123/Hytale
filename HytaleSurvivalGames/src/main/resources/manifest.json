@@ -1,0 +1,8 @@
+{
+  "Name": "HytaleSurvivalGames",
+  "Version": "1.0.0",
+  "Author": "HytaleDevTeam",
+  "Description": "A complete Survival Games (Hunger Games) implementation for Hytale servers with multiple arenas, lobby management, and player tracking.",
+  "MainClass": "com.hytale.survivalgames.SurvivalGamesPlugin",
+  "Dependencies": []
+}
