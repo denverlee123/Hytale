@@ -1,5 +1,5 @@
 {
-  "Group": "com.hytale",
+  "Group": "SurvivalGames",
   "Name": "HytaleSurvivalGames",
   "Version": "1.0.0",
   "Main": "com.hytale.survivalgames.SurvivalGamesPlugin"
