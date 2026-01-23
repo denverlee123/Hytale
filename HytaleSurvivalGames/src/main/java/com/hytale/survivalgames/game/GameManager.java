@@ -134,7 +134,7 @@ public class GameManager {
 
         // Send join message
         broadcastToArena(arena,
-            Message.raw("§a" + player.getDisplayName() + " joined! (" +
+            Message.raw("" + player.getDisplayName() + " joined! (" +
                 arena.getPlayerCount() + "/" + arena.getMaxPlayers() + ")"));
 
         // TODO: Teleport player to lobby spawn
@@ -163,7 +163,7 @@ public class GameManager {
         arena.removePlayer(playerId);
 
         broadcastToArena(arena,
-            Message.raw("§c" + player.getDisplayName() + " left! (" +
+            Message.raw("" + player.getDisplayName() + " left! (" +
                 arena.getPlayerCount() + "/" + arena.getMaxPlayers() + ")"));
 
         // Check if game should end
@@ -179,7 +179,7 @@ public class GameManager {
         arena.setGameState(GameState.STARTING);
 
         broadcastToArena(arena,
-            Message.raw("§eGame starting in " + plugin.getConfig().getCountdownTime() + " seconds..."));
+            Message.raw("Game starting in " + plugin.getConfig().getCountdownTime() + " seconds..."));
 
         // TODO: Implement actual countdown timer using Hytale's scheduler
         // For now, we'll immediately start the game as a placeholder
@@ -192,18 +192,64 @@ public class GameManager {
     private void startGame(@Nonnull Arena arena) {
         arena.setGameState(GameState.IN_GAME);
 
-        broadcastToArena(arena, Message.raw("§a§l======================"));
-        broadcastToArena(arena, Message.raw("§e§lSURVIVAL GAMES"));
-        broadcastToArena(arena, Message.raw("§a§l======================"));
-        broadcastToArena(arena, Message.raw("§7Last player standing wins!"));
+        broadcastToArena(arena, Message.raw("======================"));
+        broadcastToArena(arena, Message.raw("SURVIVAL GAMES"));
+        broadcastToArena(arena, Message.raw("======================"));
+        broadcastToArena(arena, Message.raw("Last player standing wins!"));
 
         // Initialize game timer
         gameTimers.put(arena, arena.getGameTime());
 
-        // TODO: Teleport players to spawn points
-        // TODO: Spawn loot in chests
-        // TODO: Start game timer
+        // Teleport players to spawn points
+        teleportPlayersToSpawns(arena);
 
+        // Spawn loot in chests
+        spawnChestLoot(arena);
+
+    }
+
+    /**
+     * Teleport all players to random spawn points
+     */
+    private void teleportPlayersToSpawns(@Nonnull Arena arena) {
+        List<Vector3d> spawnPoints = arena.getSpawnPoints();
+        List<UUID> players = arena.getPlayers();
+
+        if (spawnPoints.isEmpty()) {
+            plugin.getLogger().warn("No spawn points configured for arena: " + arena.getName());
+            return;
+        }
+
+        // Shuffle spawn points for random assignment
+        List<Vector3d> shuffledSpawns = new ArrayList<>(spawnPoints);
+        Collections.shuffle(shuffledSpawns);
+
+        // Teleport each player to a spawn point
+        for (int i = 0; i < players.size(); i++) {
+            UUID playerId = players.get(i);
+            Vector3d spawnPoint = shuffledSpawns.get(i % shuffledSpawns.size());
+
+            // Get the player entity from the server
+            HytaleServer.getServer().getEntity(playerId).ifPresent(entity -> {
+                if (entity instanceof Player) {
+                    Player player = (Player) entity;
+                    try {
+                        // Teleport player to spawn point
+                        player.setPosition(spawnPoint);
+                        player.sendMessage(Message.raw("Good luck!"));
+                    } catch (Exception e) {
+                        plugin.getLogger().error("Failed to teleport player " + player.getDisplayName() + ": " + e.getMessage());
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Spawn loot in all chest locations
+     */
+    private void spawnChestLoot(@Nonnull Arena arena) {
+        plugin.getLootManager().populateArenaChests(arena);
     }
 
     /**
@@ -213,8 +259,8 @@ public class GameManager {
         arena.addSpectator(playerId);
 
         broadcastToArena(arena,
-            Message.raw("§cA player §7was eliminated! §e" +
-                arena.getPlayerCount() + " §7remaining."));
+            Message.raw("A player was eliminated! " +
+                arena.getPlayerCount() + " remaining."));
 
         // Check win condition
         if (arena.getPlayerCount() == 1) {
@@ -232,15 +278,15 @@ public class GameManager {
         arena.setGameState(GameState.ENDING);
 
         if (winner != null) {
-            broadcastToArena(arena, Message.raw("§a§l======================"));
-            broadcastToArena(arena, Message.raw("§6§l" + winner.getDisplayName() + " WINS!"));
-            broadcastToArena(arena, Message.raw("§a§l======================"));
+            broadcastToArena(arena, Message.raw("======================"));
+            broadcastToArena(arena, Message.raw("" + winner.getDisplayName() + " WINS!"));
+            broadcastToArena(arena, Message.raw("======================"));
 
             if (plugin.getConfig().isBroadcastEnd()) {
                 // TODO: Broadcast to entire server
             }
         } else {
-            broadcastToArena(arena, Message.raw("§cGame ended!"));
+            broadcastToArena(arena, Message.raw("Game ended!"));
         }
 
         // Clean up timers
@@ -278,7 +324,7 @@ public class GameManager {
             return;
         }
 
-        broadcastToArena(arena, Message.raw("§cGame stopped by administrator!"));
+        broadcastToArena(arena, Message.raw("Game stopped by administrator!"));
         endGame(arena, null);
     }
 

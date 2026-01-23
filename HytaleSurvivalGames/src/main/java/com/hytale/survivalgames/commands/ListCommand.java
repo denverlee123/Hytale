@@ -24,21 +24,21 @@ public class ListCommand extends CommandBase {
 
     @Override
     protected void executeSync(@Nonnull CommandContext context) {
-        context.sendMessage(Message.raw("§e§l=== Survival Games Arenas ==="));
+        context.sendMessage(Message.raw("=== Survival Games Arenas ==="));
 
         if (plugin.getGameManager().getArenaCount() == 0) {
-            context.sendMessage(Message.raw("§7No arenas configured yet."));
-            context.sendMessage(Message.raw("§7Ask an admin to create an arena."));
+            context.sendMessage(Message.raw("No arenas configured yet."));
+            context.sendMessage(Message.raw("Ask an admin to create an arena."));
             return;
         }
 
         for (Arena arena : plugin.getGameManager().getArenas()) {
             String status = getArenaStatus(arena);
             context.sendMessage(Message.raw(
-                "§7- §e" + arena.getDisplayName() +
-                " §8(" + arena.getName() + ") " +
+                "- " + arena.getDisplayName() +
+                " (" + arena.getName() + ") " +
                 status +
-                " §7[" + arena.getPlayerCount() + "/" + arena.getMaxPlayers() + "]"
+                " [" + arena.getPlayerCount() + "/" + arena.getMaxPlayers() + "]"
             ));
         }
     }
@@ -49,19 +49,19 @@ public class ListCommand extends CommandBase {
     private String getArenaStatus(Arena arena) {
         switch (arena.getGameState()) {
             case WAITING:
-                return "§aWaiting";
+                return "Waiting";
             case STARTING:
-                return "§eStarting";
+                return "Starting";
             case IN_GAME:
-                return "§6In Progress";
+                return "In Progress";
             case DEATHMATCH:
-                return "§cDeathmatch";
+                return "Deathmatch";
             case ENDING:
-                return "§7Ending";
+                return "Ending";
             case DISABLED:
-                return "§8Disabled";
+                return "Disabled";
             default:
-                return "§7Unknown";
+                return "Unknown";
         }
     }
 }

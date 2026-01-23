@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerChatEvent;
 import com.hytale.survivalgames.commands.*;
 import com.hytale.survivalgames.config.SGConfig;
 import com.hytale.survivalgames.game.GameManager;
+import com.hytale.survivalgames.game.LootManager;
 import com.hytale.survivalgames.listeners.PlayerEventListener;
 import com.hytale.survivalgames.player.PlayerDataManager;
 
@@ -34,6 +35,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
     // Core managers
     private GameManager gameManager;
     private PlayerDataManager playerDataManager;
+    private LootManager lootManager;
 
     /**
      * Constructor - called when plugin is loaded
@@ -81,6 +83,9 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 
         // Player data manager
         this.playerDataManager = new PlayerDataManager(this);
+
+        // Loot manager - handles chest loot
+        this.lootManager = new LootManager(this);
 
         // Game manager - handles all game logic
         this.gameManager = new GameManager(this);
@@ -194,5 +199,15 @@ public class SurvivalGamesPlugin extends JavaPlugin {
     @Nonnull
     public PlayerDataManager getPlayerDataManager() {
         return playerDataManager;
+    }
+
+    /**
+     * Get loot manager
+     *
+     * @return LootManager instance
+     */
+    @Nonnull
+    public LootManager getLootManager() {
+        return lootManager;
     }
 }
