@@ -13,6 +13,8 @@ import com.hytale.survivalgames.game.GameManager;
 import com.hytale.survivalgames.game.LootManager;
 import com.hytale.survivalgames.listeners.PlayerEventListener;
 import com.hytale.survivalgames.player.PlayerDataManager;
+import com.hytale.survivalgames.systems.ArenaProtectionSystem;
+import com.hytale.survivalgames.systems.PlayerDeathSystem;
 
 import javax.annotation.Nonnull;
 
@@ -74,6 +76,9 @@ public class SurvivalGamesPlugin extends JavaPlugin {
 
         // Register event listeners
         registerEventListeners();
+
+        // Register ECS systems
+        registerECSSystems();
 
         LOGGER.atInfo().log("Survival Games plugin setup complete!");
         LOGGER.atInfo().log("Loaded %d arena(s)", gameManager.getArenaCount());
@@ -143,6 +148,22 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         );
 
         LOGGER.atInfo().log("Event listeners registered successfully");
+    }
+
+    /**
+     * Register ECS systems for death detection and arena protection
+     */
+    private void registerECSSystems() {
+        LOGGER.atInfo().log("Registering ECS systems...");
+
+        // Death detection system
+        this.getEntityStoreRegistry().registerSystem(new PlayerDeathSystem(this));
+
+        // Arena protection systems
+        this.getEntityStoreRegistry().registerSystem(new ArenaProtectionSystem.BlockBreakProtection(this));
+        this.getEntityStoreRegistry().registerSystem(new ArenaProtectionSystem.BlockPlaceProtection(this));
+
+        LOGGER.atInfo().log("ECS systems registered successfully");
     }
 
     /**
