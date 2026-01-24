@@ -2,7 +2,7 @@ package com.hytale.survivalgames.util;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.items.ItemWithAllMetadata;
+import com.hypixel.hytale.protocol.ItemWithAllMetadata;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
