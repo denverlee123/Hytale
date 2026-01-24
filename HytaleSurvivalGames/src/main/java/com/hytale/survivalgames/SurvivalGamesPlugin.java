@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerChatEvent;
 import com.hytale.survivalgames.commands.*;
+import com.hytale.survivalgames.commands.admin.*;
 import com.hytale.survivalgames.config.SGConfig;
 import com.hytale.survivalgames.game.GameManager;
 import com.hytale.survivalgames.game.LootManager;
@@ -108,17 +109,18 @@ public class SurvivalGamesPlugin extends JavaPlugin {
     private void registerCommands() {
         LOGGER.atInfo().log("Registering commands...");
 
-        // Main SG command with subcommands
+        // Player commands
         this.getCommandRegistry().registerCommand(new SGCommand(this));
-
-        // Quick join command
         this.getCommandRegistry().registerCommand(new JoinCommand(this));
-
-        // Leave command
         this.getCommandRegistry().registerCommand(new LeaveCommand(this));
-
-        // List arenas command
         this.getCommandRegistry().registerCommand(new ListCommand(this));
+
+        // Admin commands
+        this.getCommandRegistry().registerCommand(new CreateArenaCommand(this));
+        this.getCommandRegistry().registerCommand(new AddSpawnCommand(this));
+        this.getCommandRegistry().registerCommand(new AddChestCommand(this));
+        this.getCommandRegistry().registerCommand(new ForceStartCommand(this));
+        this.getCommandRegistry().registerCommand(new ArenaInfoCommand(this));
 
         LOGGER.atInfo().log("Commands registered successfully");
     }

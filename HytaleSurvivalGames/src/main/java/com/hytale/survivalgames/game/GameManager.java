@@ -194,6 +194,18 @@ public class GameManager {
     }
 
     /**
+     * Force start a game immediately (admin command)
+     */
+    public void forceStartGame(@Nonnull Arena arena) {
+        if (!arena.getGameState().canStart()) {
+            return;
+        }
+
+        broadcastToArena(arena, Message.raw("Game force-started by admin!"));
+        startGame(arena);
+    }
+
+    /**
      * Start the actual game
      */
     private void startGame(@Nonnull Arena arena) {
