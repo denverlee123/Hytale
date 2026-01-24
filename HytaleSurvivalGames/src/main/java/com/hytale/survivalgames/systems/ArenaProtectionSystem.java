@@ -1,7 +1,8 @@
 package com.hytale.survivalgames.systems;
 
-import com.hypixel.hytale.component.ComponentAccessor;
-import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.server.core.Message;
@@ -16,19 +17,19 @@ import javax.annotation.Nonnull;
 import java.util.UUID;
 
 /**
- * Prevents block breaking in Survival Games arenas
+ * Prevents block breaking and placing in Survival Games arenas
  */
 public class ArenaProtectionSystem {
 
     /**
      * Prevents block breaking in active arenas
      */
-    public static class BlockBreakProtection extends EntityEventSystem<EntityStore, BreakBlockEvent.Pre> {
+    public static class BlockBreakProtection extends EntityEventSystem<EntityStore, BreakBlockEvent> {
 
         private final SurvivalGamesPlugin plugin;
 
         public BlockBreakProtection(@Nonnull SurvivalGamesPlugin plugin) {
-            super(BreakBlockEvent.Pre.class);
+            super(BreakBlockEvent.class);
             this.plugin = plugin;
         }
 
@@ -39,11 +40,13 @@ public class ArenaProtectionSystem {
         }
 
         @Override
-        public void handle(@Nonnull Ref<EntityStore> ref,
-                          @Nonnull BreakBlockEvent.Pre event,
-                          @Nonnull ComponentAccessor<EntityStore> accessor) {
+        public void handle(int index,
+                          @Nonnull ArchetypeChunk<EntityStore> chunk,
+                          @Nonnull Store<EntityStore> store,
+                          @Nonnull CommandBuffer<EntityStore> commandBuffer,
+                          @Nonnull BreakBlockEvent event) {
 
-            Player player = accessor.getComponent(ref, Player.getComponentType());
+            Player player = chunk.getComponent(index, Player.getComponentType());
             if (player == null) return;
 
             UUID playerId = player.getUuid();
@@ -60,12 +63,12 @@ public class ArenaProtectionSystem {
     /**
      * Prevents block placing in active arenas
      */
-    public static class BlockPlaceProtection extends EntityEventSystem<EntityStore, PlaceBlockEvent.Pre> {
+    public static class BlockPlaceProtection extends EntityEventSystem<EntityStore, PlaceBlockEvent> {
 
         private final SurvivalGamesPlugin plugin;
 
         public BlockPlaceProtection(@Nonnull SurvivalGamesPlugin plugin) {
-            super(PlaceBlockEvent.Pre.class);
+            super(PlaceBlockEvent.class);
             this.plugin = plugin;
         }
 
@@ -76,11 +79,13 @@ public class ArenaProtectionSystem {
         }
 
         @Override
-        public void handle(@Nonnull Ref<EntityStore> ref,
-                          @Nonnull PlaceBlockEvent.Pre event,
-                          @Nonnull ComponentAccessor<EntityStore> accessor) {
+        public void handle(int index,
+                          @Nonnull ArchetypeChunk<EntityStore> chunk,
+                          @Nonnull Store<EntityStore> store,
+                          @Nonnull CommandBuffer<EntityStore> commandBuffer,
+                          @Nonnull PlaceBlockEvent event) {
 
-            Player player = accessor.getComponent(ref, Player.getComponentType());
+            Player player = chunk.getComponent(index, Player.getComponentType());
             if (player == null) return;
 
             UUID playerId = player.getUuid();
