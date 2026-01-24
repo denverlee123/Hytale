@@ -52,6 +52,6 @@ public class PlayerDeathSystem extends DeathSystems.OnDeathSystem {
         if (!arena.getGameState().isRunning()) return;
 
         // Handle player elimination
-        plugin.getGameManager().handlePlayerDeath(playerId, arena, component);
+        plugin.getGameManager().handlePlayerElimination(playerId, arena);
     }
 }
