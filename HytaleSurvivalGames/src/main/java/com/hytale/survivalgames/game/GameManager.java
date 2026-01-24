@@ -1,11 +1,12 @@
 package com.hytale.survivalgames.game;
 
-import com.hypixel.hytale.component.ComponentAccessor;
-import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.Teleport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hytale.survivalgames.SurvivalGamesPlugin;
@@ -226,26 +227,39 @@ public class GameManager {
         List<Vector3d> shuffledSpawns = new ArrayList<>(spawnPoints);
         Collections.shuffle(shuffledSpawns);
 
-        // Get world and component accessor for teleportation
         World world = arena.getWorld();
-        ComponentAccessor<EntityStore> accessor = world.getEntityStore().getStore();
 
         // Teleport each player to a spawn point
         for (int i = 0; i < players.size(); i++) {
             UUID playerId = players.get(i);
             Vector3d spawnPoint = shuffledSpawns.get(i % shuffledSpawns.size());
 
-            // Get player entity and ref
+            // Get player entity
             Player player = (Player) world.getEntity(playerId);
             if (player != null) {
-                Ref<EntityStore> playerRef = world.getEntityRef(playerId);
-                if (playerRef != null) {
-                    // Teleport player to spawn point
-                    player.moveTo(playerRef, spawnPoint.getX(), spawnPoint.getY(), spawnPoint.getZ(), accessor);
-                    player.sendMessage(Message.raw("Good luck!"));
-                }
+                teleportPlayer(player, world, spawnPoint);
+                player.sendMessage(Message.raw("Good luck!"));
             }
         }
+    }
+
+    /**
+     * Teleport a player to a specific position using Hytale's Teleport component
+     */
+    private void teleportPlayer(@Nonnull Player player, @Nonnull World world, @Nonnull Vector3d position) {
+        world.execute(() -> {
+            if (player.getReference() == null) return;
+
+            Store<EntityStore> store = player.getReference().getStore();
+
+            Teleport teleport = Teleport.createForPlayer(
+                world,
+                position,                      // Target position
+                new Vector3f(0, 0, 0)         // Target rotation (pitch, yaw, roll)
+            );
+
+            store.addComponent(player.getReference(), Teleport.getComponentType(), teleport);
+        });
     }
 
     /**
