@@ -60,4 +60,13 @@ public enum GameState {
     public boolean isRunning() {
         return this != WAITING && this != DISABLED;
     }
+
+    /**
+     * Check if the game can be force started
+     *
+     * @return true if state is WAITING or STARTING
+     */
+    public boolean canStart() {
+        return this == WAITING || this == STARTING;
+    }
 }

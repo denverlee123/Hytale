@@ -300,51 +300,6 @@ public class GameManager {
         plugin.getLootManager().populateArenaChests(arena);
     }
 
-    /**
-     * Handle player death (called from PlayerDeathSystem)
-     */
-    public void handlePlayerDeath(@Nonnull UUID playerId, @Nonnull Arena arena, @Nonnull DeathComponent deathComponent) {
-        Player player = (Player) arena.getWorld().getEntity(playerId);
-        if (player == null) return;
-
-        String playerName = player.getDisplayName();
-
-        // Move player to spectators
-        arena.removePlayer(playerId);
-        arena.addSpectator(playerId);
-
-        // Announce elimination
-        broadcastToArena(arena,
-            Message.raw(playerName + " was eliminated! " +
-                arena.getPlayerCount() + " remaining."));
-
-        // Send notification to eliminated player
-        GameUtils.sendNotification(
-            playerId,
-            "You were eliminated!",
-            "Better luck next time!",
-            "Item_Skull"
-        );
-
-        // Broadcast elimination notification to remaining players
-        for (UUID remainingPlayer : arena.getPlayers()) {
-            GameUtils.sendNotification(
-                remainingPlayer,
-                playerName + " eliminated!",
-                arena.getPlayerCount() + " players remaining",
-                "Weapon_Sword_Iron"
-            );
-        }
-
-        // Check win condition
-        if (arena.getPlayerCount() == 1) {
-            UUID winnerId = arena.getPlayers().get(0);
-            Player winner = (Player) arena.getWorld().getEntity(winnerId);
-            endGame(arena, winner);
-        } else if (arena.getPlayerCount() == 0) {
-            endGame(arena, null);
-        }
-    }
 
     /**
      * Handle player elimination
