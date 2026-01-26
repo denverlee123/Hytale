@@ -47,9 +47,9 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Initialize configuration with Codec
         this.config = this.withConfig("SurvivalGames", SGConfig.CODEC);
 
-        // getLogger().log("===========================================");
-        // getLogger().log("  Hytale Survival Games - Initializing");
-        // getLogger().log("===========================================");
+        System.out.println("===========================================");
+        System.out.println("  Hytale Survival Games - Initializing");
+        System.out.println("===========================================");
     }
 
     /**
@@ -58,7 +58,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
      */
     @Override
     protected void setup() {
-        // getLogger().log("Setting up Survival Games plugin...");
+        System.out.println("Setting up Survival Games plugin...");
 
         // Initialize managers
         initializeManagers();
@@ -69,15 +69,15 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Register event listeners
         registerEventListeners();
 
-        // getLogger().log("Survival Games plugin setup complete!");
-        // getLogger().log("Loaded " + gameManager.getArenaCount() + " arena(s)");
+        System.out.println("Survival Games plugin setup complete!");
+        System.out.println("Loaded " + gameManager.getArenaCount() + " arena(s)");
     }
 
     /**
      * Initialize all manager classes
      */
     private void initializeManagers() {
-        // getLogger().log("Initializing managers...");
+        System.out.println("Initializing managers...");
 
         // Player data manager
         this.playerDataManager = new PlayerDataManager(this);
@@ -85,35 +85,37 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Game manager - handles all game logic
         this.gameManager = new GameManager(this);
 
-        // getLogger().log("Managers initialized successfully");
+        System.out.println("Managers initialized successfully");
     }
 
     /**
      * Register all plugin commands
      */
     private void registerCommands() {
-        // getLogger().log("Registering commands...");
+        System.out.println("Registering commands...");
 
         // Main SG command with subcommands
         this.getCommandRegistry().registerCommand(new SGCommand(this));
 
-        // Quick join command
+        // Player commands
         this.getCommandRegistry().registerCommand(new JoinCommand(this));
-
-        // Leave command
         this.getCommandRegistry().registerCommand(new LeaveCommand(this));
-
-        // List arenas command
         this.getCommandRegistry().registerCommand(new ListCommand(this));
 
-        // getLogger().log("Commands registered successfully");
+        // Admin commands for arena setup
+        this.getCommandRegistry().registerCommand(new CreateArenaCommand(this));
+        this.getCommandRegistry().registerCommand(new AddSpawnCommand(this));
+        this.getCommandRegistry().registerCommand(new AddChestCommand(this));
+        this.getCommandRegistry().registerCommand(new ForceStartCommand(this));
+
+        System.out.println("Commands registered successfully");
     }
 
     /**
      * Register all event listeners using the correct Hytale pattern
      */
     private void registerEventListeners() {
-        // getLogger().log("Registering event listeners...");
+        System.out.println("Registering event listeners...");
 
         // Player ready event (when player joins server)
         this.getEventRegistry().registerGlobal(
@@ -133,14 +135,14 @@ public class SurvivalGamesPlugin extends JavaPlugin {
             PlayerEventListener::onPlayerChat
         );
 
-        // getLogger().log("Event listeners registered successfully");
+        System.out.println("Event listeners registered successfully");
     }
 
     /**
      * Reload plugin configuration and game data
      */
     public void reload() {
-        // getLogger().log("Reloading Survival Games configuration...");
+        System.out.println("Reloading Survival Games configuration...");
 
         // Stop all active games
         gameManager.stopAllGames();
@@ -151,7 +153,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Reinitialize game manager
         gameManager.reload();
 
-        // getLogger().log("Reload complete!");
+        System.out.println("Reload complete!");
     }
 
     // ========== Getters ==========

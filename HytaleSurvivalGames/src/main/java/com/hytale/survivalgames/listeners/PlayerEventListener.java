@@ -41,6 +41,7 @@ public class PlayerEventListener {
         SurvivalGamesPlugin plugin = SurvivalGamesPlugin.getInstance();
 
         // Get player UUID from event
+        @SuppressWarnings("removal")
         java.util.UUID playerId = event.getPlayerRef().getUuid();
 
         // Check if player is in a game
@@ -65,6 +66,7 @@ public class PlayerEventListener {
         SurvivalGamesPlugin plugin = SurvivalGamesPlugin.getInstance();
 
         // Get player UUID from sender
+        @SuppressWarnings("removal")
         java.util.UUID playerId = event.getSender().getUuid();
 
         // Check if player is in a game

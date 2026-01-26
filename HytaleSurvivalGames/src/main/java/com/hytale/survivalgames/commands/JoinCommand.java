@@ -31,13 +31,15 @@ public class JoinCommand extends CommandBase {
         try {
             player = context.senderAs(Player.class);
         } catch (Exception e) {
-            context.sendMessage(Message.raw("§cOnly players can join games!"));
+            context.sendMessage(Message.raw("Only players can join games!"));
             return;
         }
 
         // Check if already in a game
-        if (plugin.getGameManager().getPlayerArena(player.getUuid()) != null) {
-            context.sendMessage(Message.raw("§cYou are already in a game! Use /sgleave to leave."));
+        @SuppressWarnings("removal")
+        java.util.UUID playerId = player.getUuid();
+        if (plugin.getGameManager().getPlayerArena(playerId) != null) {
+            context.sendMessage(Message.raw("You are already in a game! Use /sgleave to leave."));
             return;
         }
 
@@ -45,16 +47,16 @@ public class JoinCommand extends CommandBase {
         Arena arena = findAvailableArena();
 
         if (arena == null) {
-            context.sendMessage(Message.raw("§cNo arenas are currently available!"));
-            context.sendMessage(Message.raw("§7Please wait for a game to start or ask an admin to create an arena."));
+            context.sendMessage(Message.raw("No arenas are currently available!"));
+            context.sendMessage(Message.raw("Please wait for a game to start or ask an admin to create an arena."));
             return;
         }
 
         // Try to join
         if (plugin.getGameManager().joinArena(player, arena)) {
-            context.sendMessage(Message.raw("§aYou joined the " + arena.getDisplayName() + " arena!"));
+            context.sendMessage(Message.raw("You joined the " + arena.getDisplayName() + " arena!"));
         } else {
-            context.sendMessage(Message.raw("§cCould not join arena! It may be full or in progress."));
+            context.sendMessage(Message.raw("Could not join arena! It may be full or in progress."));
         }
     }
 
