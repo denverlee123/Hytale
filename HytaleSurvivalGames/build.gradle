@@ -41,4 +41,14 @@ test {
 jar {
     archiveBaseName = 'HytaleSurvivalGames'
     archiveVersion = version
+
+    manifest {
+        attributes(
+            'Plugin-Class': 'com.hytale.survivalgames.SurvivalGamesPlugin',
+            'Plugin-Name': 'HytaleSurvivalGames',
+            'Plugin-Version': version,
+            'Plugin-Author': 'HytaleDevTeam',
+            'Plugin-Description': 'A complete Survival Games implementation for Hytale servers'
+        )
+    }
 }

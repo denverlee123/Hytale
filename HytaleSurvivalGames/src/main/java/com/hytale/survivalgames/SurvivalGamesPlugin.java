@@ -1,5 +1,6 @@
 package com.hytale.survivalgames;
 
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
@@ -7,10 +8,15 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerChatEvent;
 import com.hytale.survivalgames.commands.*;
+import com.hytale.survivalgames.commands.admin.*;
+import com.hytale.survivalgames.commands.admin.*;
 import com.hytale.survivalgames.config.SGConfig;
 import com.hytale.survivalgames.game.GameManager;
+import com.hytale.survivalgames.game.LootManager;
 import com.hytale.survivalgames.listeners.PlayerEventListener;
 import com.hytale.survivalgames.player.PlayerDataManager;
+import com.hytale.survivalgames.systems.ArenaProtectionSystem;
+import com.hytale.survivalgames.systems.PlayerDeathSystem;
 
 import javax.annotation.Nonnull;
 
@@ -25,6 +31,9 @@ import javax.annotation.Nonnull;
  */
 public class SurvivalGamesPlugin extends JavaPlugin {
 
+    // Logger
+    public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
     // Singleton instance
     private static SurvivalGamesPlugin instance;
 
@@ -34,6 +43,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
     // Core managers
     private GameManager gameManager;
     private PlayerDataManager playerDataManager;
+    private LootManager lootManager;
 
     /**
      * Constructor - called when plugin is loaded
@@ -47,9 +57,9 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Initialize configuration with Codec
         this.config = this.withConfig("SurvivalGames", SGConfig.CODEC);
 
-        // getLogger().log("===========================================");
-        // getLogger().log("  Hytale Survival Games - Initializing");
-        // getLogger().log("===========================================");
+        LOGGER.atInfo().log("===========================================");
+        LOGGER.atInfo().log("  Hytale Survival Games - Initializing");
+        LOGGER.atInfo().log("===========================================");
     }
 
     /**
@@ -58,7 +68,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
      */
     @Override
     protected void setup() {
-        // getLogger().log("Setting up Survival Games plugin...");
+        LOGGER.atInfo().log("Setting up Survival Games plugin...");
 
         // Initialize managers
         initializeManagers();
@@ -69,51 +79,58 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Register event listeners
         registerEventListeners();
 
-        // getLogger().log("Survival Games plugin setup complete!");
-        // getLogger().log("Loaded " + gameManager.getArenaCount() + " arena(s)");
+        // Register ECS systems
+        registerECSSystems();
+
+        LOGGER.atInfo().log("Survival Games plugin setup complete!");
+        LOGGER.atInfo().log("Loaded %d arena(s)", gameManager.getArenaCount());
     }
 
     /**
      * Initialize all manager classes
      */
     private void initializeManagers() {
-        // getLogger().log("Initializing managers...");
+        LOGGER.atInfo().log("Initializing managers...");
 
         // Player data manager
         this.playerDataManager = new PlayerDataManager(this);
 
+        // Loot manager - handles chest loot
+        this.lootManager = new LootManager(this);
+
         // Game manager - handles all game logic
         this.gameManager = new GameManager(this);
 
-        // getLogger().log("Managers initialized successfully");
+        LOGGER.atInfo().log("Managers initialized successfully");
     }
 
     /**
      * Register all plugin commands
      */
     private void registerCommands() {
-        // getLogger().log("Registering commands...");
+        LOGGER.atInfo().log("Registering commands...");
 
-        // Main SG command with subcommands
+        // Player commands
         this.getCommandRegistry().registerCommand(new SGCommand(this));
-
-        // Quick join command
         this.getCommandRegistry().registerCommand(new JoinCommand(this));
-
-        // Leave command
         this.getCommandRegistry().registerCommand(new LeaveCommand(this));
-
-        // List arenas command
         this.getCommandRegistry().registerCommand(new ListCommand(this));
 
-        // getLogger().log("Commands registered successfully");
+        // Admin commands
+        this.getCommandRegistry().registerCommand(new CreateArenaCommand(this));
+        this.getCommandRegistry().registerCommand(new AddSpawnCommand(this));
+        this.getCommandRegistry().registerCommand(new AddChestCommand(this));
+        this.getCommandRegistry().registerCommand(new ForceStartCommand(this));
+        this.getCommandRegistry().registerCommand(new ArenaInfoCommand(this));
+
+        LOGGER.atInfo().log("Commands registered successfully");
     }
 
     /**
      * Register all event listeners using the correct Hytale pattern
      */
     private void registerEventListeners() {
-        // getLogger().log("Registering event listeners...");
+        LOGGER.atInfo().log("Registering event listeners...");
 
         // Player ready event (when player joins server)
         this.getEventRegistry().registerGlobal(
@@ -133,14 +150,30 @@ public class SurvivalGamesPlugin extends JavaPlugin {
             PlayerEventListener::onPlayerChat
         );
 
-        // getLogger().log("Event listeners registered successfully");
+        LOGGER.atInfo().log("Event listeners registered successfully");
+    }
+
+    /**
+     * Register ECS systems for death detection and arena protection
+     */
+    private void registerECSSystems() {
+        LOGGER.atInfo().log("Registering ECS systems...");
+
+        // Death detection system
+        this.getEntityStoreRegistry().registerSystem(new PlayerDeathSystem(this));
+
+        // Arena protection systems
+        this.getEntityStoreRegistry().registerSystem(new ArenaProtectionSystem.BlockBreakProtection(this));
+        this.getEntityStoreRegistry().registerSystem(new ArenaProtectionSystem.BlockPlaceProtection(this));
+
+        LOGGER.atInfo().log("ECS systems registered successfully");
     }
 
     /**
      * Reload plugin configuration and game data
      */
     public void reload() {
-        // getLogger().log("Reloading Survival Games configuration...");
+        LOGGER.atInfo().log("Reloading Survival Games configuration...");
 
         // Stop all active games
         gameManager.stopAllGames();
@@ -151,7 +184,7 @@ public class SurvivalGamesPlugin extends JavaPlugin {
         // Reinitialize game manager
         gameManager.reload();
 
-        // getLogger().log("Reload complete!");
+        LOGGER.atInfo().log("Reload complete!");
     }
 
     // ========== Getters ==========
@@ -194,5 +227,15 @@ public class SurvivalGamesPlugin extends JavaPlugin {
     @Nonnull
     public PlayerDataManager getPlayerDataManager() {
         return playerDataManager;
+    }
+
+    /**
+     * Get loot manager
+     *
+     * @return LootManager instance
+     */
+    @Nonnull
+    public LootManager getLootManager() {
+        return lootManager;
     }
 }
